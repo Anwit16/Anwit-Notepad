@@ -876,7 +876,6 @@ function setupCanvas(){
     if(!isReadOnly||isAdmin) startStroke(e.offsetX,e.offsetY);
   });
   cvsBg.addEventListener('mousemove', e=>{
-    moveCursor(e.offsetX,e.offsetY);
     if(!isReadOnly||isAdmin) continueStroke(e.offsetX,e.offsetY);
   });
   cvsBg.addEventListener('mouseup',   endStroke);
@@ -886,7 +885,7 @@ function setupCanvas(){
     if(isMorse){sendMorsePulse(t.x,t.y);return;}
     if(!isReadOnly||isAdmin) startStroke(t.x,t.y);
   },{passive:false});
-  cvsBg.addEventListener('touchmove', e=>{e.preventDefault();const t=tp(e);moveCursor(t.x,t.y);if(!isReadOnly||isAdmin) continueStroke(t.x,t.y);},{passive:false});
+  cvsBg.addEventListener('touchmove', e=>{e.preventDefault();const t=tp(e);if(!isReadOnly||isAdmin) continueStroke(t.x,t.y);},{passive:false});
   cvsBg.addEventListener('touchend',  endStroke);
 
   applyGrid();
