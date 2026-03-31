@@ -4,7 +4,7 @@ Thank you for your interest in contributing. This document explains how to get i
 
 ---
 
-## What we're looking for
+## What I'm looking for
 
 Good contributions include:
 
@@ -14,7 +14,7 @@ Good contributions include:
 - **Accessibility** — keyboard navigation, screen reader support
 - **New features** — see the roadmap below before building something new
 
-We are NOT looking for:
+I am NOT looking for:
 
 - Dependency additions (this project intentionally has zero npm dependencies)
 - Framework rewrites (vanilla JS is a deliberate choice)
