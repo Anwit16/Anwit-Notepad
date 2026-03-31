@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-<title>Anwit's Notepad</title>
+<title>Hawkins Board</title>
 
 <!-- PWA -->
 <link rel="manifest" href="manifest.json"/>
@@ -323,7 +323,7 @@ input[type="range"]{width:60px;accent-color:var(--red);flex-shrink:0;}
 <!-- ── HOME ── -->
 <div class="screen" id="sHome">
   <div class="card">
-    <div class="card-title flicker">Anwit's Notepad</div>
+    <div class="card-title flicker">Hawkins Board</div>
     <div class="card-sub">a private shared canvas for two</div>
     <div class="home-btns">
       <button class="big-btn" onclick="showScreen('sCreate')">✦ Create a Room</button>
@@ -515,8 +515,8 @@ const FB={
   appId:            "YOUR_APP_ID"
 };
 const COLORS=['#e01010','#2980b9','#0b9e52','#8e44ad','#d07010','#16a085','#e67e22','#c0392b'];
-const LS_PREFIX='anwit_room_';
-const LS_LAST='anwit_last_room';
+const LS_PREFIX='hb_room_';
+const LS_LAST='hb_last_room';
 
 // ══════════════════════════════════════════════════════════
 //  ROOM + USER STATE

@@ -1,4 +1,4 @@
-# Contributing to Anwit's Notepad
+# Contributing to Hawkins Board
 
 Thank you for your interest in contributing. This document explains how to get involved.
 
@@ -29,8 +29,8 @@ We are NOT looking for:
 Click **Fork** on GitHub, then clone your fork:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/Anwit-Notepad.git
-cd Anwit-Notepad
+git clone https://github.com/YOUR_USERNAME/hawkins-board.git
+cd hawkins-board
 ```
 
 ### 2. Set up Firebase

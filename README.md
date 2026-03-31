@@ -1,10 +1,10 @@
-# Anwit's Notepad ✦
+# Hawkins Board ✦
 
 A private, real-time shared canvas for two people — with a Stranger Things aesthetic.
 
 Create a room, share the code, draw and write together. No accounts. No tracking. Just a private shared space.
 
-**[→ Live Demo](https://anwit16.github.io/Anwit-Notepad)**
+**[→ Live Demo](https://hawkinsboard.github.io/hawkins-board)**
 
 ---
 
@@ -53,8 +53,8 @@ No frameworks. No npm. No bundler. One HTML file.
 ### 1. Fork or clone this repo
 
 ```bash
-git clone https://github.com/Anwit16/Anwit-Notepad.git
-cd Anwit-Notepad
+git clone https://github.com/hawkinsboard/hawkins-board.git
+cd hawkins-board
 ```
 
 ### 2. Create a Firebase project
