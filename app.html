@@ -1024,18 +1024,22 @@ function endStroke(){
 function getStrokesRef(){return roomRef.child('pages/'+currentPage+'/strokes');}
 function getClearedRef(){return roomRef.child('pages/'+currentPage+'/cleared');}
 
+let pageInitialised=false; // track whether we've done the first loadPage
+
 function listenPages(){
   pagesMetaRef.on('value',snap=>{
     const d=snap.val()||{};
     pages=d;
-    // Ensure at least one page exists
     if(!d.p1){
       pagesMetaRef.child('p1').set({name:'Page 1'});
-      return; // wait for the set to trigger on('value') again
+      return;
     }
     renderPageTabs();
-    // Load current page if not yet loaded, or if it no longer exists
-    if(!allStrokes || !pages[currentPage]){
+    // Always load on first run; also load if current page was deleted
+    if(!pageInitialised){
+      pageInitialised=true;
+      loadPage('p1');
+    } else if(!pages[currentPage]){
       loadPage('p1');
     }
   });
