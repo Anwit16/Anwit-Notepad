@@ -4,8 +4,6 @@ A private, real-time shared canvas for two people - with a Stranger Things aesth
 
 Create a room, share the code, draw and write together. No accounts. No tracking. Just a private shared space.
 
-**[→ Live Demo](https://hawkinsboard.github.io/hawkins-board)**
-
 ---
 
 ## What it looks like
