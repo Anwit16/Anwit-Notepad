@@ -22,14 +22,14 @@ Create a room, share the code, draw and write together. No accounts. No tracking
 |---|---|
 | **Private rooms** | 6-character room code + 4-digit PIN. Each room is completely isolated. |
 | **Real-time canvas** | Strokes sync to all users in under a second via Firebase. |
-| **Multiple pages** | Add and delete pages. All synced. |
+| **Multiple pages** | Add, rename, and delete pages. All synced. |
 | **Per-user undo** | Undo removes only your own last stroke. |
 | **Admin controls** | Kick users, lock canvas to read-only, clear all. |
 | **Message in lights** | Type a word — the lights bar spells it out letter by letter. |
 | **Morse code mode** | Tap the canvas to send pulse ripples to your partner. |
 | **Export PNG** | Download the current canvas as a dark-background PNG. |
 | **Auto-resume** | Reload the page — your room and canvas state are restored. |
-| **Mobile responsive** | Works on iPhone, Android and desktop. Draw with finger or mouse. |
+| **Mobile responsive** | Works on iPhone, Android, and desktop. Draw with finger or mouse. |
 
 ---
 
