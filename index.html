@@ -14,7 +14,7 @@ window.addEventListener('orientationchange',function(){setTimeout(setH,300);});
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --bg:#04040a;--sf:rgba(10,8,18,.9);--bd:rgba(200,16,16,.2);
+  --bg:#0a0608;--sf:rgba(10,8,18,.9);--bd:rgba(200,16,16,.2);
   --tx:#cfc4b0;--mt:#5a5268;
   --red:#e01010;--r2:#ff2a2a;--rd:rgba(58,8,8,.8);
   --grn:#0b9e52;--amb:#d07010;
@@ -32,7 +32,7 @@ html,body{height:100%;width:100%;overflow:hidden;background:var(--bg);color:var(
     radial-gradient(ellipse 70% 55% at 15% 85%,rgba(80,0,0,.35) 0%,transparent 60%),
     radial-gradient(ellipse 55% 45% at 85% 15%,rgba(40,0,60,.25) 0%,transparent 55%),
     radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.75) 100%),
-    #04040a;
+    #0a0608;
   animation:atmP 6s ease-in-out infinite;
 }
 @keyframes atmP{0%,100%{filter:brightness(.85);}50%{filter:brightness(1);}}
@@ -112,7 +112,7 @@ html,body{height:100%;width:100%;overflow:hidden;background:var(--bg);color:var(
   position:fixed;inset:0;
   height:var(--vh,100vh);
   /* Solid colour — no gradients, no transparency, no atmosphere */
-  background:#04040a;
+  background:#0a0608;
   /* High z-index — covers everything */
   z-index:50;
   overflow:hidden;
@@ -158,6 +158,8 @@ input[type=range]{width:60px;accent-color:var(--red);flex-shrink:0;}
 .uav{width:22px;height:22px;border-radius:50%;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;color:#fff;}
 .uav img{width:100%;height:100%;object-fit:cover;}
 .ud{width:4px;height:4px;border-radius:50%;background:var(--grn);flex-shrink:0;}
+.ud.drawing{background:var(--amb);animation:drawPulse .6s ease-in-out infinite;}
+@keyframes drawPulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.6);opacity:.7;}}
 .un{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:65px;}
 .kb{width:12px;height:12px;background:transparent;border:none;cursor:pointer;color:var(--mt);font-size:10px;padding:0;transition:color .1s;}
 .kb:hover{color:var(--red);}
@@ -168,12 +170,15 @@ input[type=range]{width:60px;accent-color:var(--red);flex-shrink:0;}
 #sd.err{background:var(--red);}
 
 /* canvas area — solid black */
-#cw{flex:1;min-height:0;position:relative;overflow:hidden;background:#04040a;cursor:crosshair;}
+#cw{flex:1;min-height:0;position:relative;overflow:hidden;background:#0a0608;cursor:crosshair;}
 #cw.ro{cursor:not-allowed;}
 #cvb,#cvc{position:absolute;inset:0;width:100%;height:100%;touch-action:none;}
 #cvc{pointer-events:none;}
 #rob{display:none;position:absolute;top:0;left:0;right:0;z-index:5;background:rgba(224,16,16,.1);border-bottom:1px solid var(--red);color:var(--r2);font-size:10px;text-align:center;padding:4px;letter-spacing:.12em;text-transform:uppercase;pointer-events:none;}
 #rob.on{display:block;}
+#mFlash{position:absolute;inset:0;pointer-events:none;z-index:22;background:rgba(255,220,180,0);display:none;}
+#mFlash.on{display:block;animation:mPulse .18s ease-out forwards;}
+@keyframes mPulse{0%{background:rgba(255,220,180,.18);}100%{background:rgba(255,220,180,0);}}
 #rc{position:absolute;pointer-events:none;width:10px;height:10px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid rgba(255,255,255,.2);display:none;z-index:10;}
 #rl{position:absolute;pointer-events:none;font-size:9px;color:#fff;background:rgba(0,0,0,.6);padding:2px 5px;border-radius:4px;transform:translate(9px,-50%);display:none;z-index:10;white-space:nowrap;}
 
@@ -189,7 +194,7 @@ input[type=range]{width:60px;accent-color:var(--red);flex-shrink:0;}
 .lx{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--mt);cursor:pointer;font-size:14px;}
 
 /* kicked */
-#sk{position:fixed;inset:0;z-index:999;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#04040a;padding:24px;}
+#sk{position:fixed;inset:0;z-index:999;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#0a0608;padding:24px;}
 #sk.on{display:flex;}
 .kt{font-family:'Nosifer',cursive;font-size:22px;color:var(--r2);text-align:center;letter-spacing:3px;text-shadow:var(--glow);}
 .ks{font-size:12px;color:var(--mt);text-align:center;line-height:1.8;}
@@ -334,13 +339,12 @@ input[type=range]{width:60px;accent-color:var(--red);flex-shrink:0;}
 <div id="app">
   <div id="lb"><div class="lw"></div></div>
   <div id="tb">
-    <span id="rlbl"></span>
+    <span id="rlbl" onclick="shareRoom()" title="Click to copy room link" style="cursor:pointer;"></span>
     <div class="sep"></div>
     <div id="ptabs"></div>
     <button class="pta" onclick="addPage()">+</button>
     <div class="sep"></div>
     <button class="t on" id="bPen"  onclick="setT('pen')">✒ Pen</button>
-    <button class="t"    id="bMark" onclick="setT('marker')">▌ Marker</button>
     <button class="t"    id="bEra"  onclick="setT('eraser')">◻ Erase</button>
     <div class="sep"></div>
     <input type="color" id="colP" value="#e8dcc8"/>
@@ -351,8 +355,9 @@ input[type=range]{width:60px;accent-color:var(--red);flex-shrink:0;}
     <button class="t dn" id="bClr" onclick="doClear()" style="display:none">⌫ Clear</button>
     <button class="t gn" onclick="doExp()">↓ PNG</button>
     <div class="sep"></div>
-    <button class="t ad" id="bRO" onclick="toggleRO()" style="display:none">🔒 Lock</button>
+    <button class="t" id="bMorse" onclick="toggleMorse()">⚡ Morse</button>
     <button class="t" onclick="openL()">💡 Lights</button>
+    <button class="t gn" onclick="shareRoom()">⎘ Share</button>
     <button class="t" onclick="doLeave()">↩ Leave</button>
     <div class="fl"></div>
     <div id="ua"></div>
@@ -361,7 +366,7 @@ input[type=range]{width:60px;accent-color:var(--red);flex-shrink:0;}
   <div id="cw">
     <canvas id="cvb"></canvas>
     <canvas id="cvc"></canvas>
-    <div id="rob">canvas locked — view only</div>
+    <div id="mFlash"></div>
     <div id="rc"></div>
     <div id="rl"></div>
   </div>
@@ -413,11 +418,11 @@ const myColor=COLORS[Math.floor(Math.random()*COLORS.length)];
 let myName='',myAvatar='';
 
 // Room state
-let roomId='',roomName='',roomPin='',isCreator=false,isAdmin=false,isRO=false,prevOnline=0;
+let roomId='',roomName='',roomPin='',isCreator=false,isAdmin=false,isMorse=false,prevOnline=0;
 
 // Firebase refs
 let db=null;
-let rRef,sessRef,waitRef,admRef,usersRef,myRef,pagesRef,strokesBase,lRef,kickRef;
+let rRef,sessRef,waitRef,admRef,usersRef,myRef,pagesRef,strokesBase,lRef,morseRef,kickRef;
 
 function initDB(){
   if(db)return;
@@ -434,6 +439,7 @@ function setRefs(){
   pagesRef=rRef.child('pagesMeta');
   strokesBase=rRef.child('pages');
   lRef=rRef.child('lights');
+  morseRef=rRef.child('morse');
   kickRef=rRef.child('kicked/'+myId);
 }
 
@@ -679,10 +685,9 @@ function enterCanvas(){
   setSS('sync');
 
   // 4. UI setup
-  document.getElementById('rlbl').textContent=roomName||roomId;
+  document.getElementById('rlbl').textContent=(roomName||roomId)+' · '+roomId;
   if(isAdmin){
     document.getElementById('bClr').style.display='';
-    document.getElementById('bRO').style.display='';
   }
 
   // 5. Setup canvas — deferred so browser has done layout first
@@ -695,8 +700,8 @@ function enterCanvas(){
     listenPages();
     setupHB();
     listenKicked();
-    listenRO();
     listenL();
+    listenMorse();
 
     // 7. Toolbar events
     document.getElementById('colP').addEventListener('input',e=>brushColor=e.target.value);
@@ -724,12 +729,19 @@ function setupCanvas(){
   ctxC=cvc.getContext('2d');
   resz();
   window.addEventListener('resize',resz);
-  cvb.addEventListener('mousedown',e=>{if(!isRO||isAdmin)startS(e.offsetX,e.offsetY);});
-  cvb.addEventListener('mousemove',e=>{if(!isRO||isAdmin)contS(e.offsetX,e.offsetY);});
+  cvb.addEventListener('mousedown',e=>{
+    if(isMorse){sendMorse(e.offsetX,e.offsetY);return;}
+    startS(e.offsetX,e.offsetY);
+  });
+  cvb.addEventListener('mousemove',e=>contS(e.offsetX,e.offsetY));
   cvb.addEventListener('mouseup',endS);
   cvb.addEventListener('mouseleave',endS);
-  cvb.addEventListener('touchstart',e=>{e.preventDefault();const t=tp(e);if(!isRO||isAdmin)startS(t.x,t.y);},{passive:false});
-  cvb.addEventListener('touchmove',e=>{e.preventDefault();const t=tp(e);if(!isRO||isAdmin)contS(t.x,t.y);},{passive:false});
+  cvb.addEventListener('touchstart',e=>{
+    e.preventDefault();const t=tp(e);
+    if(isMorse){sendMorse(t.x,t.y);return;}
+    startS(t.x,t.y);
+  },{passive:false});
+  cvb.addEventListener('touchmove',e=>{e.preventDefault();const t=tp(e);contS(t.x,t.y);},{passive:false});
   cvb.addEventListener('touchend',endS);
 }
 function resz(){
@@ -772,6 +784,7 @@ function startS(x,y){
   drawing=true;stroke=[[x,y]];
   ctxC.save();applyS(ctxC,tool,brushColor,brushSize);
   ctxC.beginPath();ctxC.moveTo(x,y);
+  myRef.update({drawing:true,ts:Date.now()});
 }
 function contS(x,y){
   if(!drawing)return;
@@ -793,15 +806,22 @@ function endS(){
   getPageRef().push(s)
     .then(ref=>{localK.add(ref.key);strokes[ref.key]=s;myKeys.push(ref.key);setSS('live');})
     .catch(()=>setSS('err'));
+  myRef.update({drawing:false});
   stroke=[];
 }
 function setT(t){
   tool=t;
-  ['pen','marker','eraser'].forEach(n=>{
+  ['pen','eraser'].forEach(n=>{
     const b=document.getElementById('b'+n.charAt(0).toUpperCase()+n.slice(1));
     if(b)b.classList.toggle('on',n===t);
   });
   document.getElementById('cw').style.cursor=t==='eraser'?'cell':'crosshair';
+}
+function shareRoom(){
+  const url=location.origin+location.pathname+'?room='+roomId;
+  navigator.clipboard.writeText(url)
+    .then(()=>toast('Room link copied! ⎘'))
+    .catch(()=>prompt('Copy this link:',url));
 }
 
 // ── PAGES ─────────────────────────────────────────────────
@@ -918,7 +938,10 @@ function renderUsers(data){
     const lbl=(u.name||'?')+(u.isAdmin?' ★':'');
     const av=u.avatar?`<img src="${u.avatar}"/>`:((u.name||'?')[0].toUpperCase());
     const kb=isAdmin&&id!==myId?`<button class="kb" onclick="kickUser('${id}')">✕</button>`:'';
-    return`<div class="uc"><div class="uav" style="background:${u.color||'#888'}">${av}</div><div class="ud"></div><span class="un">${lbl}</span>${kb}</div>`;
+    // Drawing indicator: pulsing amber dot when partner is actively drawing
+    const isDrawing=id!==myId&&u.drawing===true;
+    const dot=isDrawing?`<div class="ud drawing" title="${u.name} is drawing..."></div>`:`<div class="ud"></div>`;
+    return`<div class="uc"${isDrawing?' title="'+lbl+' is drawing..."':''}><div class="uav" style="background:${u.color||'#888'}">${av}</div>${dot}<span class="un">${lbl}</span>${kb}</div>`;
   }).join('');
 }
 function updateCursor(data){
@@ -943,21 +966,48 @@ function listenKicked(){
     showBlocked('YOU HAVE BEEN REMOVED','the admin closed the door.');
   });
 }
-function toggleRO(){
-  isRO=!isRO;
-  sessRef.child('readOnly').set(isRO);
-  document.getElementById('bRO').textContent=isRO?'🔓 Unlock':'🔒 Lock';
-  document.getElementById('bRO').classList.toggle('on',isRO);
-  toast(isRO?'Canvas locked':'Canvas unlocked');
+// ── MORSE ─────────────────────────────────────────────────
+function toggleMorse(){
+  isMorse=!isMorse;
+  const btn=document.getElementById('bMorse');
+  btn.classList.toggle('on',isMorse);
+  btn.textContent=isMorse?'⚡ Morse ON':'⚡ Morse';
+  document.getElementById('cw').style.cursor=isMorse?'cell':'crosshair';
+  toast(isMorse?'Morse mode — tap to pulse':'Morse off');
 }
-function listenRO(){
-  sessRef.child('readOnly').on('value',snap=>{
-    isRO=!!snap.val();
-    if(!isAdmin){
-      document.getElementById('cw').classList.toggle('ro',isRO);
-      document.getElementById('rob').classList.toggle('on',isRO);
+function sendMorse(x,y){
+  morseRef.push({x:Math.round(x),y:Math.round(y),uid:myId,ts:Date.now()});
+  showMFlash();
+  drawMorseRing(x,y,'#fff');
+}
+function listenMorse(){
+  morseRef.on('child_added',snap=>{
+    const p=snap.val();if(!p)return;
+    if(Date.now()-p.ts>5000)return;
+    if(p.uid!==myId){
+      showMFlash();
+      drawMorseRing(p.x,p.y,'#ffb347');
     }
+    setTimeout(()=>morseRef.child(snap.key).remove(),4000);
   });
+}
+function showMFlash(){
+  const mf=document.getElementById('mFlash');
+  mf.classList.remove('on');void mf.offsetWidth;mf.classList.add('on');
+}
+function drawMorseRing(x,y,color){
+  let r=4,alpha=0.9;
+  function step(){
+    if(alpha<=0)return;
+    ctxC.save();
+    ctxC.beginPath();ctxC.arc(x,y,r,0,Math.PI*2);
+    ctxC.strokeStyle=color;ctxC.lineWidth=1.5;
+    ctxC.globalAlpha=alpha;ctxC.stroke();
+    ctxC.restore();
+    r+=3;alpha-=0.055;
+    requestAnimationFrame(step);
+  }
+  step();
 }
 
 // ── LIGHTS ────────────────────────────────────────────────
@@ -1041,7 +1091,7 @@ function doExp(){
   const ec=document.createElement('canvas');
   ec.width=cvb.width;ec.height=cvb.height;
   const cx=ec.getContext('2d');
-  cx.fillStyle='#04040a';cx.fillRect(0,0,ec.width,ec.height);
+  cx.fillStyle='#0a0608';cx.fillRect(0,0,ec.width,ec.height);
   cx.drawImage(cvb,0,0);
   const a=document.createElement('a');
   a.download=`${roomName||roomId}-${Date.now()}.png`;
