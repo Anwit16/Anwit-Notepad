@@ -32,7 +32,7 @@ html,body{
 /* ── SCREENS ── */
 .screen{
   position:fixed;top:0;left:0;right:0;bottom:0;
-  background:var(--bg);display:flex;align-items:center;justify-content:center;
+  background:transparent;display:flex;align-items:center;justify-content:center;
   z-index:50;overflow-y:auto;-webkit-overflow-scrolling:touch;
 }
 .screen.hidden{display:none;}
@@ -69,18 +69,20 @@ html,body{
 .back-link:hover{color:var(--text);}
 .err{font-size:11px;color:var(--red2);min-height:14px;text-align:center;margin-top:-12px;letter-spacing:.06em;}
 
-/* ── HOME ATMOSPHERE ── */
-#sHome{background:#000;overflow:hidden;}
+/* ── HOME ATMOSPHERE — covers entire pre-canvas flow ── */
 
-/* Full-screen particle canvas behind everything */
+/* Global black base for the gate screens */
+html,body{background:#000;}
+
+/* Full-screen particle canvas — sits behind everything */
 #homeBg{
-  position:absolute;inset:0;width:100%;height:100%;
-  pointer-events:none;z-index:0;
+  position:fixed;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:1;
 }
 
 /* Red edge vignette — pulsing */
 #homeVignette{
-  position:absolute;inset:0;pointer-events:none;z-index:1;
+  position:fixed;inset:0;pointer-events:none;z-index:2;
   background:radial-gradient(ellipse at center,
     transparent 35%,
     rgba(120,0,0,.18) 65%,
@@ -95,7 +97,7 @@ html,body{
 
 /* Occasional full-screen red flicker */
 #homeFlicker{
-  position:absolute;inset:0;pointer-events:none;z-index:2;
+  position:fixed;inset:0;pointer-events:none;z-index:3;
   background:rgba(180,0,0,0);
   animation:homeFlick 8s infinite;
 }
@@ -105,6 +107,9 @@ html,body{
   92%{background:rgba(180,0,0,.02);}
   94%{background:rgba(180,0,0,.06);}
 }
+
+/* Screens sit above atmosphere, below app */
+.screen{z-index:50;}
 
 /* Floating home card */
 .home-card{
@@ -119,6 +124,7 @@ html,body{
     0 0 80px rgba(224,16,16,.08),
     inset 0 1px 0 rgba(255,255,255,.03);
   backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
   display:flex;flex-direction:column;align-items:center;gap:20px;
   width:min(92vw,400px);
   animation:cardRise .9s cubic-bezier(.22,1,.36,1) both;
@@ -153,11 +159,17 @@ html,body{
   font-size:9px;color:rgba(90,82,104,.6);letter-spacing:.1em;
   text-align:center;text-transform:uppercase;margin-top:-8px;
 }
-
-/* HOME BTNS — reuse .big-btn but override gap */
 .home-btns{display:flex;flex-direction:column;gap:10px;width:100%;}
 
-/* ── END HOME ATMOSPHERE ── */
+/* All other cards also get glass effect during gate flow */
+.card{
+  background:rgba(8,6,12,.88);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-color:rgba(224,16,16,.18);
+}
+
+/* ── END ATMOSPHERE ── */
 
 /* PIN */
 .pin-row{display:flex;gap:10px;}
@@ -396,11 +408,13 @@ input[type="range"]{width:60px;accent-color:var(--red);flex-shrink:0;}
 </head>
 <body>
 
+<!-- ── GLOBAL ATMOSPHERE (visible across all gate screens) ── -->
+<canvas id="homeBg"></canvas>
+<div id="homeVignette"></div>
+<div id="homeFlicker"></div>
+
 <!-- ── HOME ── -->
 <div class="screen" id="sHome">
-  <canvas id="homeBg"></canvas>
-  <div id="homeVignette"></div>
-  <div id="homeFlicker"></div>
   <div class="home-card" id="homeCard">
     <div class="home-title flicker">Hawkins<br/>Board</div>
     <div class="home-sub">a private shared canvas for two</div>
@@ -969,6 +983,11 @@ function enterCanvas(){
     if(el) el.classList.add('hidden');
   });
   document.getElementById('app').classList.add('on');
+  // Hide atmosphere — not needed inside canvas
+  ['homeBg','homeVignette','homeFlicker'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.style.display='none';
+  });
   fixHeight();
 
   // Room label
@@ -1486,6 +1505,11 @@ function exportPNG(){
 function signOut(){
   clearSession();
   if(myUserRef) myUserRef.remove();
+  // Restore atmosphere for gate screens
+  ['homeBg','homeVignette','homeFlicker'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.style.display='';
+  });
   location.reload();
 }
 
@@ -1589,9 +1613,9 @@ function showBlockedAndReset(title,sub){
   }
 
   function frame(){
-    // Only animate when home screen is visible
-    const home=document.getElementById('sHome');
-    if(home&&home.classList.contains('hidden')){
+    // Pause when inside the canvas (app is active)
+    const appEl=document.getElementById('app');
+    if(appEl&&appEl.classList.contains('on')){
       requestAnimationFrame(frame); return;
     }
 
