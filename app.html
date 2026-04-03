@@ -29,21 +29,23 @@ html,body{
   position:fixed;inset:0;
 }
 
-/* ── ATMOSPHERE (CSS only — no JS animation loop) ──────── */
-body::before{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+/* ── ATMOSPHERE — simple div, not body pseudo-elements ── */
+#atm{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
   background:
     radial-gradient(ellipse 80% 60% at 20% 80%,rgba(80,0,0,.22) 0%,transparent 65%),
     radial-gradient(ellipse 60% 50% at 80% 20%,rgba(40,0,60,.18) 0%,transparent 60%),
     radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.7) 100%);
   animation:atmPulse 6s ease-in-out infinite;
 }
+#atm.off{display:none;}
 @keyframes atmPulse{0%,100%{opacity:.7;}50%{opacity:1;}}
-body::after{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+#atmFlick{
+  position:fixed;inset:0;z-index:2;pointer-events:none;
   background:rgba(160,0,0,0);
   animation:atmFlick 10s steps(1) infinite;
 }
+#atmFlick.off{display:none;}
 @keyframes atmFlick{
   0%,87%,89%,91%,100%{background:rgba(160,0,0,0);}
   88%{background:rgba(160,0,0,.04);}
@@ -299,7 +301,6 @@ input[type=range]{width:60px;accent-color:var(--red);flex-shrink:0;}
 #canvasWrap.ro{cursor:not-allowed;}
 #cvsBg,#cvsCur{position:absolute;inset:0;width:100%;height:100%;touch-action:none;}
 #cvsCur{pointer-events:none;}
-#vignette{position:absolute;inset:0;pointer-events:none;z-index:2;background:radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.4) 100%);}
 #roBanner{display:none;position:absolute;top:0;left:0;right:0;z-index:5;background:rgba(224,16,16,.1);border-bottom:1px solid var(--red);color:var(--red2);font-size:10px;text-align:center;padding:4px;letter-spacing:.12em;text-transform:uppercase;pointer-events:none;}
 #roBanner.show{display:block;}
 #rCursor{position:absolute;pointer-events:none;width:10px;height:10px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid rgba(255,255,255,.2);display:none;z-index:10;}
@@ -378,6 +379,8 @@ input[type=range]{width:60px;accent-color:var(--red);flex-shrink:0;}
 </style>
 </head>
 <body>
+<div id="atm"></div>
+<div id="atmFlick"></div>
 
 <!-- ══ HOME ══════════════════════════════════════════════ -->
 <div class="screen" id="sHome">
@@ -518,7 +521,6 @@ input[type=range]{width:60px;accent-color:var(--red);flex-shrink:0;}
   <div id="canvasWrap">
     <canvas id="cvsBg"></canvas>
     <canvas id="cvsCur"></canvas>
-    <div id="vignette"></div>
     <div id="roBanner">canvas locked — view only</div>
     <div id="rCursor"></div>
     <div id="rLabel"></div>
@@ -889,8 +891,10 @@ function enterCanvas(){
   ['sHome','sCreate','sJoin','sId','sWait'].forEach(s=>{
     const el=document.getElementById(s);if(el) el.classList.add('hidden');
   });
-  // 2. Show app
+  // 2. Show app, hide atmosphere
   document.getElementById('app').classList.add('on');
+  document.getElementById('atm').classList.add('off');
+  document.getElementById('atmFlick').classList.add('off');
   // 3. Update sync label right away
   setSyncStatus('sync');
   // 4. Room label
@@ -1312,6 +1316,8 @@ function doExport(){
 function doLeave(){
   clearSession();
   if(myRef) myRef.remove();
+  document.getElementById('atm').classList.remove('off');
+  document.getElementById('atmFlick').classList.remove('off');
   location.reload();
 }
 

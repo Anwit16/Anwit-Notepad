@@ -1,33 +1,11 @@
 {
   "rules": {
+    ".read": false,
+    ".write": false,
     "rooms": {
-      ".read": false,
-      ".write": false,
       "$roomId": {
-        "meta": {
-          ".read": true,
-          ".write": "!data.exists() && $roomId.matches(/^[A-Z0-9]{6}$/)",
-          ".validate": "newData.hasChildren(['name','pin','createdAt']) && newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('pin').isString() && newData.child('pin').val().matches(/^[0-9]{4}$/) && newData.child('createdAt').isNumber()"
-        },
-        "session":   { ".read": true, ".write": true },
-        "waiting":   { ".read": true, ".write": true },
-        "admitted":  { ".read": true, ".write": true },
-        "kicked":    { ".read": true, ".write": true },
-        "users":     { ".read": true, ".write": true },
-        "pagesMeta": { ".read": true, ".write": true },
-        "lights":    { ".read": true, ".write": true },
-        "pages": {
-          "$pageId": {
-            "strokes": {
-              ".read": true,
-              ".write": true,
-              "$strokeId": {
-                ".validate": "newData.hasChildren(['uid','pts','ts']) && newData.child('uid').isString() && newData.child('ts').isNumber()"
-              }
-            },
-            "cleared": { ".read": true, ".write": true }
-          }
-        }
+        ".read": true,
+        ".write": true
       }
     }
   }
